@@ -2,7 +2,6 @@
 // ContractManagementSystemDlg.cpp: 实现文件
 //
 
-#include "pch.h"
 #include "framework.h"
 #include "ContractManagementSystem.h"
 #include "ContractManagementSystemDlg.h"
@@ -65,6 +64,7 @@ BEGIN_MESSAGE_MAP(CContractManagementSystemDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CContractManagementSystemDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -153,3 +153,8 @@ HCURSOR CContractManagementSystemDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CContractManagementSystemDlg::OnBnClickedButton1()
+{
+}

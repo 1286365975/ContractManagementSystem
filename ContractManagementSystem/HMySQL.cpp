@@ -4,8 +4,6 @@
 #include "afxwin.h"  // 包含 MFC 的头文件
 
 
-//#include "HMySQL.h"//若多个文件包含，需要把该句移动到stdafx.h中
-
 HMySQL::HMySQL() :
 	ErrorNum(0), ErrorInfo("ok")
 {
@@ -13,7 +11,8 @@ HMySQL::HMySQL() :
 	mysql_init(&mysql);
 
 	// 设置字符集，否则无法处理中文
-	mysql_options(&mysql, MYSQL_SET_CHARSET_NAME, "gbk");
+	mysql_options(&mysql, MYSQL_SET_CHARSET_NAME, "utf8mb4");
+
 }
 
 HMySQL::~HMySQL()
@@ -36,14 +35,18 @@ bool HMySQL::Open()
 	if (mysql_real_connect(&mysql, mysqlcon.server, mysqlcon.user,
 		mysqlcon.password, mysqlcon.database, mysqlcon.port, 0, 0) != NULL)
 	{
+		AfxMessageBox(_T("Connected"));
 		return true;
 	}
 	else
 	{
 		ErrorIntoMySQL();
+		ShowErrorInto();
 		return false;
 	}
 }
+
+
 
 // 断开连接
 void HMySQL::Close()

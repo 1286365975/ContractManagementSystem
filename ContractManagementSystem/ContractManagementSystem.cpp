@@ -70,6 +70,14 @@ BOOL CContractManagementSystemApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
+	// 数据库连接
+	HMySQL SQL;
+	SQL.SetMySQLConInfo("localhost", "contract_user", "password123", "contractmanagementsystem", 3306);
+	if (!SQL.Open()) {
+		AfxMessageBox(_T("数据库连接失败"));
+		return FALSE;  // 连接失败时退出程序
+	}
+
 	CContractManagementSystemDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();

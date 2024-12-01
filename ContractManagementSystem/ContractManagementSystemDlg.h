@@ -33,5 +33,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButton1();
+	HMySQL SQL;
+	afx_msg void OnBnClickedOpen();
+	afx_msg void OnBnClickedButton2();
 };
 

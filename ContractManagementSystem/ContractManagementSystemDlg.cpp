@@ -64,7 +64,8 @@ BEGIN_MESSAGE_MAP(CContractManagementSystemDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BUTTON1, &CContractManagementSystemDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_Open, &CContractManagementSystemDlg::OnBnClickedOpen)
+	ON_BN_CLICKED(IDC_BUTTON2, &CContractManagementSystemDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -153,8 +154,13 @@ HCURSOR CContractManagementSystemDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
-
-void CContractManagementSystemDlg::OnBnClickedButton1()
+void CContractManagementSystemDlg::OnBnClickedOpen()
 {
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+void CContractManagementSystemDlg::OnBnClickedButton2()
+{
+	// TODO: 在此添加控件通知处理程序代码
 }

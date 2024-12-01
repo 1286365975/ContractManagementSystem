@@ -131,3 +131,4 @@ void HMySQL::ShowErrorInto()
 {
 	AfxMessageBox(ErrorInfo);//最好写到数据库日志里面  从日志里面读取加载到界面上，而不是弹出！
 }
+

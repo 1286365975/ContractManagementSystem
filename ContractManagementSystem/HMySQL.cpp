@@ -35,7 +35,6 @@ bool HMySQL::Open()
 	if (mysql_real_connect(&mysql, mysqlcon.server, mysqlcon.user,
 		mysqlcon.password, mysqlcon.database, mysqlcon.port, 0, 0) != NULL)
 	{
-		AfxMessageBox(_T("Connected"));
 		return true;
 	}
 	else
@@ -100,6 +99,7 @@ bool HMySQL::Select(const std::string& Querystr, std::vector<std::vector<std::st
 // 其他增删改的操作
 bool HMySQL::Query(const std::string& Querystr)
 {
+
 	if (0 == mysql_query(&mysql, Querystr.c_str()))
 	{
 		return true;

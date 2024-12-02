@@ -25,7 +25,6 @@
 #define IDC_END_DATE                    1015
 #define IDC_START_DATE                  1016
 #define IDC_STATUS                      1017
-#define IDC_BUTTON_ADD                  1018
 #define IDC_BUTTON_ADD_CONFIRM          1018
 
 // Next default values for new objects

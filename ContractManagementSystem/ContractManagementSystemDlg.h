@@ -3,6 +3,7 @@
 //
 #include"HMySQL.h"
 #pragma once
+extern HMySQL SQL;
 
 
 
@@ -51,7 +52,6 @@ public:
 	std::vector<std::string> OneStr;   // 存储一行数据
 	std::vector<std::vector<std::string>> AllStr;   // 存储所有查询结果（二维数组）
 private:
-	HMySQL SQL;
 public:
 	CStatic m_num;
 };

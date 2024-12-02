@@ -1,11 +1,16 @@
-﻿
-// ContractManagementSystemDlg.cpp: 实现文件
-//
-
-#include "framework.h"
+﻿#include "framework.h"
 #include "ContractManagementSystem.h"
 #include "ContractManagementSystemDlg.h"
 #include "afxdialogex.h"
+#include "addContracts.h"
+
+// 确保 HMySQL.h 只被包含一次
+#include "HMySQL.h"
+
+
+HMySQL SQL; // 确保在这个文件中进行实例化
+
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -97,7 +102,7 @@ BOOL CContractManagementSystemDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 
-	//初始化列表
+	//初始化列表和Combobox
 	InitListCtrl();
 	
 	// 数据库连接与数据加载操作
@@ -168,6 +173,8 @@ void CContractManagementSystemDlg::OnBnClickedOpen()
 
 void CContractManagementSystemDlg::OnBnClickedButton2()
 {
+	addContracts add;
+	add.DoModal();
 	// TODO: 在此添加控件通知处理程序代码
 }
 
@@ -222,7 +229,6 @@ void CContractManagementSystemDlg::ShowData()
 		}
 		showMsg.Append("\n");
 	}
-	AfxMessageBox(showMsg);  // 显示将要插入控件的数据
 
 	// 插入数据到控件
 	for (int i = 0; i < AllStr.size(); i++) {
@@ -255,7 +261,6 @@ void CContractManagementSystemDlg::LoadData()
 	// 调试信息
 	CString debugMsg;
 	debugMsg.Format("查询返回的行数: %d", row);
-	AfxMessageBox(debugMsg);  // 显示行数
 
 	// 如果没有数据
 	if (row <= 0) {
@@ -273,7 +278,6 @@ void CContractManagementSystemDlg::LoadData()
 		}
 		contentMsg.Append("\n");
 	}
-	AfxMessageBox(contentMsg);  // 显示加载的数据内容
 }
 
 

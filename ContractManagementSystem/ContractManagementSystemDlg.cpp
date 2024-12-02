@@ -55,11 +55,6 @@ CContractManagementSystemDlg::CContractManagementSystemDlg(CWnd* pParent /*=null
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CContractManagementSystemDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialogEx::DoDataExchange(pDX);
-}
-
 BEGIN_MESSAGE_MAP(CContractManagementSystemDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
@@ -101,6 +96,18 @@ BOOL CContractManagementSystemDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+
+	//初始化列表
+	InitListCtrl();
+	
+	// 数据库连接与数据加载操作
+	if (ConnectDB()) {
+		LoadData();   // 加载数据
+		ShowData();   // 显示数据
+	}
+	else {
+		AfxMessageBox("Connect ERROR");
+	}
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -163,4 +170,135 @@ void CContractManagementSystemDlg::OnBnClickedOpen()
 void CContractManagementSystemDlg::OnBnClickedButton2()
 {
 	// TODO: 在此添加控件通知处理程序代码
+}
+
+//void CContractManagementSystemDlg::ShowData()
+//{
+//	m_listCtrl.DeleteAllItems();
+//	for (int i = 0; i < AllStr.size(); i++)//AllStr[i]
+//	{
+//		for (int j = 0; j < AllStr[i].size(); j++)
+//		{
+//			if (j == 0)
+//				m_listCtrl.InsertItem(i, AllStr[i][j].c_str());
+//			else
+//				m_listCtrl.SetItemText(i, j, AllStr[i][j].c_str());
+//		}
+//	}
+	//输出统计结果 计数 
+	/*CString strt;
+	strt.Format("查询结果%d条", AllStr.size());*/
+	//GetDlgItem(IDC_TEXT)->SetWindowText(strt);
+//}
+
+//void CContractManagementSystemDlg::LoadData()
+//{
+//	AllStr.clear();  // 清空之前的数据
+//	CString strsql = "SELECT * FROM contracts";  // SQL 查询语句
+//
+//	// 执行查询并将结果存入 AllStr
+//	int row = SQL.Select(strsql.GetBuffer(), AllStr);
+//	if (row <= 0) {
+//		AfxMessageBox("没有查询到数据");
+//	}
+//}
+
+void CContractManagementSystemDlg::ShowData()
+{
+	m_listCtrl.DeleteAllItems();  // 清空列表控件
+
+	// 如果 AllStr 为空，则显示提示
+	if (AllStr.empty()) {
+		AfxMessageBox("没有数据可显示");
+		return;
+	}
+
+	// 输出 AllStr 内容进行检查
+	CString showMsg;
+	showMsg.Format("准备显示的数据: %d 条\n", AllStr.size());
+	for (int i = 0; i < AllStr.size(); i++) {
+		showMsg.AppendFormat("行 %d: ", i + 1);
+		for (int j = 0; j < AllStr[i].size(); j++) {
+			showMsg.AppendFormat("%s ", AllStr[i][j].c_str());
+		}
+		showMsg.Append("\n");
+	}
+	AfxMessageBox(showMsg);  // 显示将要插入控件的数据
+
+	// 插入数据到控件
+	for (int i = 0; i < AllStr.size(); i++) {
+		for (int j = 0; j < AllStr[i].size(); j++) {
+			if (j == 0)
+				m_listCtrl.InsertItem(i, AllStr[i][j].c_str());  // 插入第一列数据
+			else
+				m_listCtrl.SetItemText(i, j, AllStr[i][j].c_str());  // 设置其余列的数据
+		}
+	}
+
+	// 输出查询结果数量
+	CString strt;
+	strt.Format("查询结果 %d 条", AllStr.size());
+	if (GetDlgItem(IDC_TEXT)) {
+		GetDlgItem(IDC_TEXT)->SetWindowText(strt);  // 更新查询统计
+	}
+}
+
+
+
+void CContractManagementSystemDlg::LoadData()
+{
+	AllStr.clear();  // 清空之前的数据
+	CString strsql = "SELECT * FROM contracts";  // SQL 查询语句
+
+	// 执行查询并将结果存入 AllStr
+	int row = SQL.Select(strsql.GetBuffer(), AllStr);
+
+	// 调试信息
+	CString debugMsg;
+	debugMsg.Format("查询返回的行数: %d", row);
+	AfxMessageBox(debugMsg);  // 显示行数
+
+	// 如果没有数据
+	if (row <= 0) {
+		AfxMessageBox("没有查询到数据");
+		return;
+	}
+
+	// 输出 AllStr 内容进行检查
+	CString contentMsg;
+	contentMsg.Format("数据内容:\n");
+	for (int i = 0; i < AllStr.size(); i++) {
+		contentMsg.AppendFormat("行 %d: ", i + 1);
+		for (int j = 0; j < AllStr[i].size(); j++) {
+			contentMsg.AppendFormat("%s ", AllStr[i][j].c_str());
+		}
+		contentMsg.Append("\n");
+	}
+	AfxMessageBox(contentMsg);  // 显示加载的数据内容
+}
+
+
+bool CContractManagementSystemDlg::ConnectDB()
+{
+	SQL.SetMySQLConInfo("localhost", "contract_user", "password123", "contractmanagementsystem", 3306);
+	if (!SQL.Open()) {
+		return false; 
+	}
+	return true;
+}
+
+void CContractManagementSystemDlg::InitListCtrl()
+{
+	// 设置列表控件的扩展样式
+	m_listCtrl.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+
+	// 插入8个列
+	m_listCtrl.InsertColumn(0, _T("合同ID"), LVCFMT_LEFT, 60); // 合同ID
+	m_listCtrl.InsertColumn(1, _T("合同名称"), LVCFMT_LEFT, 120); // 合同名称
+	m_listCtrl.InsertColumn(2, _T("签订日期"), LVCFMT_LEFT, 100); // 签订日期
+	m_listCtrl.InsertColumn(3, _T("客户名称"), LVCFMT_LEFT, 120); // 客户名称
+	m_listCtrl.InsertColumn(4, _T("合同金额"), LVCFMT_LEFT, 100); // 合同金额
+	m_listCtrl.InsertColumn(5, _T("起始日期"), LVCFMT_LEFT, 100); // 起始日期
+	m_listCtrl.InsertColumn(6, _T("到期日期"), LVCFMT_LEFT, 100); // 到期日期
+	m_listCtrl.InsertColumn(7, _T("合同状态"), LVCFMT_LEFT, 100); // 合同状态
 }

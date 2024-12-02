@@ -11,7 +11,7 @@ HMySQL::HMySQL() :
 	mysql_init(&mysql);
 
 	// 设置字符集，否则无法处理中文
-	mysql_options(&mysql, MYSQL_SET_CHARSET_NAME, "utf8mb4");
+	mysql_options(&mysql, MYSQL_SET_CHARSET_NAME, "GBK");
 
 }
 

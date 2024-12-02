@@ -3,12 +3,14 @@
 // 功能描述：实现对MySQL访问操作的封装
 #ifndef __HMYSQL__H__  
 #define __HMYSQL_H__  
+#undef vector
 
 #include <string>  
 #include <vector>  
 #include <mysql.h>
 
 #include <winsock.h>
+#include <afxcmn.h>
 #define ERROR_QUERY_FAIL -1 // 操作失败
 
 
@@ -39,7 +41,7 @@ public:
 
 public:
 	int ErrorNum;				 // 错误代号  
-	const char* ErrorInfo;       // 错误提示  
+	const char* ErrorInfo;       // 错误提示 
 
 private:
 	MySQLConInfo mysqlcon;	 // 连接信息 库

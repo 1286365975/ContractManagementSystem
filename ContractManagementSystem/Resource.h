@@ -7,6 +7,7 @@
 #define IDS_ABOUTBOX                    101
 #define IDD_CONTRACTMANAGEMENTSYSTEM_DIALOG 102
 #define IDR_MAINFRAME                   128
+#define IDD_ADD_DIALOG                  130
 #define IDC_LIST1                       1000
 #define IDC_Open                        1001
 #define IDC_BUTTON2                     1002
@@ -16,16 +17,24 @@
 #define IDC_BUTTON6                     1006
 #define IDC_COMBO1                      1007
 #define IDC_LIST                        1009
-#define IDC_STATIC_NUM                  1010
 #define IDC_TEXT                        1010
+#define IDC_DATE                        1011
+#define IDC_NAME                        1012
+#define IDC_AMOUNT                      1013
+#define IDC_CLIENT_NAME                 1014
+#define IDC_END_DATE                    1015
+#define IDC_START_DATE                  1016
+#define IDC_STATUS                      1017
+#define IDC_BUTTON_ADD                  1018
+#define IDC_BUTTON_ADD_CONFIRM          1018
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        130
+#define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1011
+#define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

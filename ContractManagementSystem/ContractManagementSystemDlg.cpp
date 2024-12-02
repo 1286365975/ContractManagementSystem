@@ -108,7 +108,6 @@ BOOL CContractManagementSystemDlg::OnInitDialog()
 	else {
 		AfxMessageBox("Connect ERROR");
 	}
-
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

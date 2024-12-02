@@ -45,7 +45,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -188,6 +188,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="addContracts.h" />
     <ClInclude Include="ContractManagementSystem.h" />
     <ClInclude Include="ContractManagementSystemDlg.h" />
     <ClInclude Include="framework.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="addContracts.cpp" />
     <ClCompile Include="ContractManagementSystem.cpp" />
     <ClCompile Include="ContractManagementSystemDlg.cpp" />
     <ClCompile Include="HMySQL.cpp" />

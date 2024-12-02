@@ -38,6 +38,7 @@ public:
 	int GetInsertID(const std::string& Querystr);// 插入并获取插入的ID,针对自动递增ID
 	void ErrorIntoMySQL();		 // 错误消息
 	void ShowErrorInto();        // 显示
+	bool addContracts(const std::string& Querystr);//添加合同
 
 public:
 	int ErrorNum;				 // 错误代号  

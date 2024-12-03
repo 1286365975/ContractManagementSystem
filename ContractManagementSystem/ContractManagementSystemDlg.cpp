@@ -64,8 +64,11 @@ BEGIN_MESSAGE_MAP(CContractManagementSystemDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_Open, &CContractManagementSystemDlg::OnBnClickedOpen)
-	ON_BN_CLICKED(IDC_BUTTON2, &CContractManagementSystemDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON_ADD, &CContractManagementSystemDlg::OnBnClickedButtonAdd)
+	ON_BN_CLICKED(IDC_BUTTON_DELETE, &CContractManagementSystemDlg::OnBnClickedButtonDelete)
+	ON_BN_CLICKED(IDC_BUTTON_CHANGE, &CContractManagementSystemDlg::OnBnClickedButtonChange)
+	ON_BN_CLICKED(IDC_BUTTON_SEARCH, &CContractManagementSystemDlg::OnBnClickedButtonSearch)
+	ON_BN_CLICKED(IDC_BUTTON_EXIT, &CContractManagementSystemDlg::OnBnClickedButtonExit)
 END_MESSAGE_MAP()
 
 
@@ -163,19 +166,6 @@ void CContractManagementSystemDlg::OnPaint()
 HCURSOR CContractManagementSystemDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
-}
-
-void CContractManagementSystemDlg::OnBnClickedOpen()
-{
-	// TODO: 在此添加控件通知处理程序代码
-}
-
-
-void CContractManagementSystemDlg::OnBnClickedButton2()
-{
-	addContracts add;
-	add.DoModal();
-	// TODO: 在此添加控件通知处理程序代码
 }
 
 //void CContractManagementSystemDlg::ShowData()
@@ -304,4 +294,89 @@ void CContractManagementSystemDlg::InitListCtrl()
 	m_listCtrl.InsertColumn(5, _T("起始日期"), LVCFMT_LEFT, 100); // 起始日期
 	m_listCtrl.InsertColumn(6, _T("到期日期"), LVCFMT_LEFT, 100); // 到期日期
 	m_listCtrl.InsertColumn(7, _T("合同状态"), LVCFMT_LEFT, 100); // 合同状态
+}
+
+void CContractManagementSystemDlg::OnBnClickedButtonAdd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	addContracts add;
+	add.DoModal();
+
+}
+
+
+void CContractManagementSystemDlg::OnBnClickedButtonDelete()
+{
+	// 存储选中的合同ID
+	std::vector<int> selectedContractIDs;
+
+	// 获取选中的行数
+	int nCount = m_listCtrl.GetSelectedCount();
+
+	// 如果没有选中任何项
+	if (nCount == 0)
+	{
+		AfxMessageBox(_T("没有选中任何合同"));
+		return;
+	}
+
+	// 遍历所有选中的项
+	for (int nItem = 0; nItem < m_listCtrl.GetItemCount(); ++nItem)
+	{
+		// 判断当前行是否被选中
+		if (m_listCtrl.GetItemState(nItem, LVIS_SELECTED) == LVIS_SELECTED)
+		{
+			// 获取当前选中行的合同ID（第一列）
+			CString contractIDStr = m_listCtrl.GetItemText(nItem, 0); // 假设第一列是合同ID
+
+			// 将合同ID转换为整数并添加到数组中
+			int contractID = _ttoi(contractIDStr);  // 转换为整数类型
+			selectedContractIDs.push_back(contractID);
+		}
+	}
+
+	// 弹出确认框
+	int response = AfxMessageBox(_T("确定删除选中的合同吗？"), MB_YESNO | MB_ICONQUESTION);
+	if (response == IDYES)
+	{
+		// 遍历所有选中的合同 ID，执行删除操作
+		for (int i = 0; i < selectedContractIDs.size(); ++i)
+		{
+			// 构建 SQL 删除语句
+			std::string query = "DELETE FROM contracts WHERE contract_id = " + std::to_string(selectedContractIDs[i]);
+
+			// 执行删除操作
+			if (SQL.Query(query))
+			{
+				AfxMessageBox(_T("合同删除成功"));
+				LoadData();
+				ShowData();
+			}
+			else
+			{
+				AfxMessageBox(_T("删除合同失败"));
+			}
+		}
+	}
+}
+
+
+void CContractManagementSystemDlg::OnBnClickedButtonChange()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+}
+
+
+void CContractManagementSystemDlg::OnBnClickedButtonSearch()
+{
+	// TODO: 在此添加控件通知处理程序代码 
+}
+
+
+void CContractManagementSystemDlg::OnBnClickedButtonExit()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	SQL.Close();
+	EndDialog(IDCANCEL);
 }

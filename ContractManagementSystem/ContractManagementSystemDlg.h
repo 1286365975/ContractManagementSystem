@@ -38,9 +38,6 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedButton1();
-	afx_msg void OnBnClickedOpen();
-	afx_msg void OnBnClickedButton2();
 	void ShowData();   // 显示数据
 	void LoadData();
 	bool ConnectDB();
@@ -54,6 +51,12 @@ public:
 private:
 public:
 	CStatic m_num;
+	afx_msg void OnBnClickedButtonAdd();
+	afx_msg void OnBnClickedButtonDelete();
+	afx_msg void OnBnClickedButtonChange();
+	afx_msg void OnBnClickedButtonSearch();
+	afx_msg void OnBnClickedButtonExit();
+	int GetSelectedContractIDs();
 };
 
 

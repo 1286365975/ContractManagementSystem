@@ -2,7 +2,8 @@
 #include "ContractManagementSystem.h"
 #include "ContractManagementSystemDlg.h"
 #include "afxdialogex.h"
-#include "addContracts.h"
+#include "ContractInfo.h"
+#include "SearchDlg.h"
 
 // 确保 HMySQL.h 只被包含一次
 #include "HMySQL.h"
@@ -299,8 +300,34 @@ void CContractManagementSystemDlg::InitListCtrl()
 void CContractManagementSystemDlg::OnBnClickedButtonAdd()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	addContracts add;
-	add.DoModal();
+	contractInfo Info;
+	if (Info.DoModal() == IDOK) 
+	{
+		std::string name = Info.m_name;
+		std::string date = Info.m_date;
+		std::string client_name = Info.m_client_name;
+		std::string amount = Info.m_amount;
+		std::string start_date = Info.m_start_date;
+		std::string end_date = Info.m_end_date;
+		std::string status = Info.m_status_result;  // 使用转换后的状态
+
+		// 构建 SQL 插入语句
+		std::string query = "INSERT INTO contracts (contract_name, contract_data, client_name, contract_amount, start_date, end_date, status) VALUES ('" +
+			name + "', '" + date + "', '" + client_name + "', '" + amount + "', '" +
+			start_date + "', '" + end_date + "', '" + status + "')";
+
+		// 执行插入操作
+		if (SQL.Query(query)) {
+			AfxMessageBox(_T("添加成功"));
+			LoadData();  // 加载最新数据
+			ShowData();  // 刷新界面显示
+		}
+		else {
+			SQL.ErrorIntoMySQL();
+			SQL.ShowErrorInto();
+		}
+	}
+
 
 }
 
@@ -364,6 +391,70 @@ void CContractManagementSystemDlg::OnBnClickedButtonDelete()
 void CContractManagementSystemDlg::OnBnClickedButtonChange()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	contractInfo Info;
+	// 存储选中的合同ID
+	std::vector<int> selectedContractIDs;
+
+	// 获取选中的行数
+	int nCount = m_listCtrl.GetSelectedCount();
+
+	// 如果没有选中任何项
+	if (nCount == 0)
+	{
+		AfxMessageBox(_T("没有选中任何合同"));
+		return;
+	}
+	//如何选中的项超过一个
+	if (nCount > 1)
+	{
+		AfxMessageBox(_T("修改合同仅支持单选"));
+		return;
+	}
+
+	int nIndex = m_listCtrl.GetSelectionMark();   //获取选中行的行号
+	Info.m_name = m_listCtrl.GetItemText(nIndex, 1);          
+	Info.m_date = m_listCtrl.GetItemText(nIndex, 2);          
+	Info.m_client_name = m_listCtrl.GetItemText(nIndex, 3);  
+	Info.m_amount = m_listCtrl.GetItemText(nIndex, 4);        
+	Info.m_start_date = m_listCtrl.GetItemText(nIndex, 5);    
+	Info.m_end_date = m_listCtrl.GetItemText(nIndex, 6);     
+	Info.m_status_result = m_listCtrl.GetItemText(nIndex, 7); 
+
+	if (Info.DoModal() == IDOK)
+	{
+		// 获取修改后的信息
+		CString updatedName = Info.m_name;
+		CString updatedDate = Info.m_date;
+		CString updatedClientName = Info.m_client_name;
+		CString updatedAmount = Info.m_amount;
+		CString updatedStartDate = Info.m_start_date;
+		CString updatedEndDate = Info.m_end_date;
+		CString updatedStatus = Info.m_status_result;
+
+		// 构建 SQL 更新语句
+		CString contractIDStr = m_listCtrl.GetItemText(nIndex, 0);  // 获取 ID
+
+		std::string query = "UPDATE contracts SET contract_name = '" + std::string(CT2A(updatedName)) + "', " +
+			"contract_data = '" + std::string(CT2A(updatedDate)) + "', " +
+			"client_name = '" + std::string(CT2A(updatedClientName)) + "', " +
+			"contract_amount = '" + std::string(CT2A(updatedAmount)) + "', " +
+			"start_date = '" + std::string(CT2A(updatedStartDate)) + "', " +
+			"end_date = '" + std::string(CT2A(updatedEndDate)) + "', " +
+			"status = '" + std::string(CT2A(updatedStatus)) + "' " +
+			"WHERE contract_id = " + std::string(CT2A(contractIDStr));
+
+		// 执行 SQL 更新操作
+		if (SQL.Query(query)) {
+			AfxMessageBox(_T("合同修改成功"));
+			LoadData();  // 重新加载数据
+			ShowData();  // 刷新界面显示
+		}
+		else {
+			SQL.ErrorIntoMySQL();
+			SQL.ShowErrorInto();
+			AfxMessageBox(_T("合同修改失败"));
+		}
+	}
 
 }
 
@@ -371,6 +462,10 @@ void CContractManagementSystemDlg::OnBnClickedButtonChange()
 void CContractManagementSystemDlg::OnBnClickedButtonSearch()
 {
 	// TODO: 在此添加控件通知处理程序代码 
+	SearchDlg search;
+	if(search.DoModal()==IDOK)
+
+
 }
 
 

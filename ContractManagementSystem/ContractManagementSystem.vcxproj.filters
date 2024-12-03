@@ -36,7 +36,10 @@
     <ClInclude Include="HMySQL.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="addContracts.h">
+    <ClInclude Include="ContractInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,7 +56,10 @@
     <ClCompile Include="HMySQL.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="addContracts.cpp">
+    <ClCompile Include="ContractInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

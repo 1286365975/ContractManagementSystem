@@ -169,37 +169,6 @@ HCURSOR CContractManagementSystemDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-//void CContractManagementSystemDlg::ShowData()
-//{
-//	m_listCtrl.DeleteAllItems();
-//	for (int i = 0; i < AllStr.size(); i++)//AllStr[i]
-//	{
-//		for (int j = 0; j < AllStr[i].size(); j++)
-//		{
-//			if (j == 0)
-//				m_listCtrl.InsertItem(i, AllStr[i][j].c_str());
-//			else
-//				m_listCtrl.SetItemText(i, j, AllStr[i][j].c_str());
-//		}
-//	}
-	//输出统计结果 计数 
-	/*CString strt;
-	strt.Format("查询结果%d条", AllStr.size());*/
-	//GetDlgItem(IDC_TEXT)->SetWindowText(strt);
-//}
-
-//void CContractManagementSystemDlg::LoadData()
-//{
-//	AllStr.clear();  // 清空之前的数据
-//	CString strsql = "SELECT * FROM contracts";  // SQL 查询语句
-//
-//	// 执行查询并将结果存入 AllStr
-//	int row = SQL.Select(strsql.GetBuffer(), AllStr);
-//	if (row <= 0) {
-//		AfxMessageBox("没有查询到数据");
-//	}
-//}
-
 void CContractManagementSystemDlg::ShowData()
 {
 	m_listCtrl.DeleteAllItems();  // 清空列表控件
@@ -239,8 +208,6 @@ void CContractManagementSystemDlg::ShowData()
 	}
 }
 
-
-
 void CContractManagementSystemDlg::LoadData()
 {
 	AllStr.clear();  // 清空之前的数据
@@ -270,7 +237,6 @@ void CContractManagementSystemDlg::LoadData()
 		contentMsg.Append("\n");
 	}
 }
-
 
 bool CContractManagementSystemDlg::ConnectDB()
 {
@@ -461,12 +427,60 @@ void CContractManagementSystemDlg::OnBnClickedButtonChange()
 
 void CContractManagementSystemDlg::OnBnClickedButtonSearch()
 {
-	// TODO: 在此添加控件通知处理程序代码 
+	// 创建 SearchDlg 对话框实例
 	SearchDlg search;
-	if(search.DoModal()==IDOK)
+	if (search.DoModal() == IDOK)
+	{
+		// 获取搜索选项和关键字
+		CString searchOption = search.m_search_combobox_result;
+		CString searchKeyword = search.m_search_edit;
 
+		// 清空 AllStr，以便保存查询结果
+		AllStr.clear();
 
+		// 构建查询语句
+		CString strsql;
+
+		if (searchKeyword.IsEmpty()) {
+			// 如果没有输入关键字，查询所有数据
+			strsql = "SELECT * FROM contracts";
+		}
+		else {
+			// 根据下拉框的选择字段动态构建查询语句
+			if (searchOption == _T("合同ID")) {
+				strsql.Format(_T("SELECT * FROM contracts WHERE contract_id LIKE '%%%s%%'"), searchKeyword);
+			}
+			else if (searchOption == _T("合同名称")) {
+				strsql.Format(_T("SELECT * FROM contracts WHERE contract_name LIKE '%%%s%%'"), searchKeyword);
+			}
+			else if (searchOption == _T("客户名称")) {
+				strsql.Format(_T("SELECT * FROM contracts WHERE client_name LIKE '%%%s%%'"), searchKeyword);
+			}
+			else if (searchOption == _T("合同金额")) {
+				strsql.Format(_T("SELECT * FROM contracts WHERE contract_amount LIKE '%%%s%%'"), searchKeyword);
+			}
+			else {
+				// 如果下拉框选择的不是有效的字段
+				AfxMessageBox(_T("无效的搜索选项"));
+				return;
+			}
+		}
+
+		// 执行查询并传递查询语句给 LoadData
+		int row = SQL.Select(strsql.GetBuffer(), AllStr);
+
+		// 如果查询到数据
+		if (row > 0) {
+			// 查询成功后，调用 ShowData() 来显示数据
+			ShowData();
+		}
+		else {
+			AfxMessageBox(_T("没有查询到数据"));
+		}
+	}
 }
+
+
 
 
 void CContractManagementSystemDlg::OnBnClickedButtonExit()

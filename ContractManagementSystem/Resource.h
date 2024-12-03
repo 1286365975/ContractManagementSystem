@@ -33,9 +33,10 @@
 #define IDC_START_DATE                  1016
 #define IDC_STATUS                      1017
 #define IDC_BUTTON_ADD_CONFIRM          1018
-#define IDC_EDIT1                       1020
 #define IDC_SEARCH_EDIT                 1020
 #define IDC_SEARCH_COMBO                1021
+#define ID_SEARCH_CONFIRM               1023
+#define IDC_SEARCH_CONFIRM              1023
 
 // Next default values for new objects
 // 
@@ -43,7 +44,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1022
+#define _APS_NEXT_CONTROL_VALUE         1024
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

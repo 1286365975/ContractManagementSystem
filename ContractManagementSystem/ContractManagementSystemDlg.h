@@ -57,6 +57,7 @@ public:
 	afx_msg void OnBnClickedButtonSearch();
 	afx_msg void OnBnClickedButtonExit();
 	int GetSelectedContractIDs();
+	afx_msg void OnBnClickedButtonRefresh();
 };
 
 

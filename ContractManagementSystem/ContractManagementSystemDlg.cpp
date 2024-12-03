@@ -70,6 +70,7 @@ BEGIN_MESSAGE_MAP(CContractManagementSystemDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_CHANGE, &CContractManagementSystemDlg::OnBnClickedButtonChange)
 	ON_BN_CLICKED(IDC_BUTTON_SEARCH, &CContractManagementSystemDlg::OnBnClickedButtonSearch)
 	ON_BN_CLICKED(IDC_BUTTON_EXIT, &CContractManagementSystemDlg::OnBnClickedButtonExit)
+	ON_BN_CLICKED(IDC_BUTTON_REFRESH, &CContractManagementSystemDlg::OnBnClickedButtonRefresh)
 END_MESSAGE_MAP()
 
 
@@ -488,4 +489,12 @@ void CContractManagementSystemDlg::OnBnClickedButtonExit()
 	// TODO: 在此添加控件通知处理程序代码
 	SQL.Close();
 	EndDialog(IDCANCEL);
+}
+
+
+void CContractManagementSystemDlg::OnBnClickedButtonRefresh()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	LoadData();
+	ShowData();
 }

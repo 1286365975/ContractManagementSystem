@@ -4,19 +4,13 @@
 #include "afxdialogex.h"
 #include "ContractInfo.h"
 #include "SearchDlg.h"
-
-// 确保 HMySQL.h 只被包含一次
 #include "HMySQL.h"
-
-
-HMySQL SQL; // 确保在这个文件中进行实例化
-
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+HMySQL SQL;
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -107,13 +101,13 @@ BOOL CContractManagementSystemDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 
-	//初始化列表和Combobox
+	//初始化列表
 	InitListCtrl();
 	
-	// 数据库连接与数据加载操作
+	// 数据库连接
 	if (ConnectDB()) {
-		LoadData();   // 加载数据
-		ShowData();   // 显示数据
+		LoadData();
+		ShowData();
 	}
 	else {
 		AfxMessageBox("Connect ERROR");
@@ -174,30 +168,16 @@ void CContractManagementSystemDlg::ShowData()
 {
 	m_listCtrl.DeleteAllItems();  // 清空列表控件
 
-	// 如果 AllStr 为空，则显示提示
 	if (AllStr.empty()) {
 		AfxMessageBox("没有数据可显示");
 		return;
 	}
-
-	// 输出 AllStr 内容进行检查
-	CString showMsg;
-	showMsg.Format("准备显示的数据: %d 条\n", AllStr.size());
-	for (int i = 0; i < AllStr.size(); i++) {
-		showMsg.AppendFormat("行 %d: ", i + 1);
-		for (int j = 0; j < AllStr[i].size(); j++) {
-			showMsg.AppendFormat("%s ", AllStr[i][j].c_str());
-		}
-		showMsg.Append("\n");
-	}
-
-	// 插入数据到控件
 	for (int i = 0; i < AllStr.size(); i++) {
 		for (int j = 0; j < AllStr[i].size(); j++) {
 			if (j == 0)
-				m_listCtrl.InsertItem(i, AllStr[i][j].c_str());  // 插入第一列数据
+				m_listCtrl.InsertItem(i, AllStr[i][j].c_str()); 
 			else
-				m_listCtrl.SetItemText(i, j, AllStr[i][j].c_str());  // 设置其余列的数据
+				m_listCtrl.SetItemText(i, j, AllStr[i][j].c_str());
 		}
 	}
 
@@ -250,10 +230,7 @@ bool CContractManagementSystemDlg::ConnectDB()
 
 void CContractManagementSystemDlg::InitListCtrl()
 {
-	// 设置列表控件的扩展样式
 	m_listCtrl.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-
-	// 插入8个列
 	m_listCtrl.InsertColumn(0, _T("合同ID"), LVCFMT_LEFT, 60); // 合同ID
 	m_listCtrl.InsertColumn(1, _T("合同名称"), LVCFMT_LEFT, 120); // 合同名称
 	m_listCtrl.InsertColumn(2, _T("签订日期"), LVCFMT_LEFT, 100); // 签订日期
@@ -268,46 +245,33 @@ void CContractManagementSystemDlg::OnBnClickedButtonAdd()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	contractInfo Info;
-	if (Info.DoModal() == IDOK) 
+	if (Info.DoModal() == IDOK)
 	{
-		std::string name = Info.m_name;
-		std::string date = Info.m_date;
-		std::string client_name = Info.m_client_name;
-		std::string amount = Info.m_amount;
-		std::string start_date = Info.m_start_date;
-		std::string end_date = Info.m_end_date;
-		std::string status = Info.m_status_result;  // 使用转换后的状态
 
-		// 构建 SQL 插入语句
 		std::string query = "INSERT INTO contracts (contract_name, contract_data, client_name, contract_amount, start_date, end_date, status) VALUES ('" +
-			name + "', '" + date + "', '" + client_name + "', '" + amount + "', '" +
-			start_date + "', '" + end_date + "', '" + status + "')";
+			Info.m_name + "', '" + Info.m_date + "', '" + Info.m_client_name + "', '" +
+			Info.m_amount + "', '" + Info.m_start_date + "', '" + Info.m_end_date + "', '" +
+			Info.m_status_result + "')";
 
-		// 执行插入操作
 		if (SQL.Query(query)) {
 			AfxMessageBox(_T("添加成功"));
-			LoadData();  // 加载最新数据
-			ShowData();  // 刷新界面显示
+			LoadData();
+			ShowData();
 		}
 		else {
 			SQL.ErrorIntoMySQL();
 			SQL.ShowErrorInto();
 		}
 	}
-
-
 }
 
 
 void CContractManagementSystemDlg::OnBnClickedButtonDelete()
 {
-	// 存储选中的合同ID
 	std::vector<int> selectedContractIDs;
 
-	// 获取选中的行数
 	int nCount = m_listCtrl.GetSelectedCount();
 
-	// 如果没有选中任何项
 	if (nCount == 0)
 	{
 		AfxMessageBox(_T("没有选中任何合同"));
@@ -317,29 +281,23 @@ void CContractManagementSystemDlg::OnBnClickedButtonDelete()
 	// 遍历所有选中的项
 	for (int nItem = 0; nItem < m_listCtrl.GetItemCount(); ++nItem)
 	{
-		// 判断当前行是否被选中
 		if (m_listCtrl.GetItemState(nItem, LVIS_SELECTED) == LVIS_SELECTED)
 		{
-			// 获取当前选中行的合同ID（第一列）
-			CString contractIDStr = m_listCtrl.GetItemText(nItem, 0); // 假设第一列是合同ID
+			CString contractIDStr = m_listCtrl.GetItemText(nItem, 0);
 
-			// 将合同ID转换为整数并添加到数组中
-			int contractID = _ttoi(contractIDStr);  // 转换为整数类型
+			int contractID = _ttoi(contractIDStr); 
 			selectedContractIDs.push_back(contractID);
 		}
 	}
 
-	// 弹出确认框
 	int response = AfxMessageBox(_T("确定删除选中的合同吗？"), MB_YESNO | MB_ICONQUESTION);
+
 	if (response == IDYES)
 	{
-		// 遍历所有选中的合同 ID，执行删除操作
+		// 遍历所有选中的合同 ID
 		for (int i = 0; i < selectedContractIDs.size(); ++i)
 		{
-			// 构建 SQL 删除语句
 			std::string query = "DELETE FROM contracts WHERE contract_id = " + std::to_string(selectedContractIDs[i]);
-
-			// 执行删除操作
 			if (SQL.Query(query))
 			{
 				AfxMessageBox(_T("合同删除成功"));
@@ -428,26 +386,20 @@ void CContractManagementSystemDlg::OnBnClickedButtonChange()
 
 void CContractManagementSystemDlg::OnBnClickedButtonSearch()
 {
-	// 创建 SearchDlg 对话框实例
 	SearchDlg search;
 	if (search.DoModal() == IDOK)
 	{
-		// 获取搜索选项和关键字
 		CString searchOption = search.m_search_combobox_result;
 		CString searchKeyword = search.m_search_edit;
 
-		// 清空 AllStr，以便保存查询结果
 		AllStr.clear();
 
-		// 构建查询语句
 		CString strsql;
 
 		if (searchKeyword.IsEmpty()) {
-			// 如果没有输入关键字，查询所有数据
 			strsql = "SELECT * FROM contracts";
 		}
 		else {
-			// 根据下拉框的选择字段动态构建查询语句
 			if (searchOption == _T("合同ID")) {
 				strsql.Format(_T("SELECT * FROM contracts WHERE contract_id LIKE '%%%s%%'"), searchKeyword);
 			}
@@ -461,18 +413,14 @@ void CContractManagementSystemDlg::OnBnClickedButtonSearch()
 				strsql.Format(_T("SELECT * FROM contracts WHERE contract_amount LIKE '%%%s%%'"), searchKeyword);
 			}
 			else {
-				// 如果下拉框选择的不是有效的字段
 				AfxMessageBox(_T("无效的搜索选项"));
 				return;
 			}
 		}
 
-		// 执行查询并传递查询语句给 LoadData
 		int row = SQL.Select(strsql.GetBuffer(), AllStr);
 
-		// 如果查询到数据
 		if (row > 0) {
-			// 查询成功后，调用 ShowData() 来显示数据
 			ShowData();
 		}
 		else {
@@ -480,8 +428,6 @@ void CContractManagementSystemDlg::OnBnClickedButtonSearch()
 		}
 	}
 }
-
-
 
 
 void CContractManagementSystemDlg::OnBnClickedButtonExit()

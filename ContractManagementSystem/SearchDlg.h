@@ -28,6 +28,6 @@ public:
 	CComboBox m_search_combobox;
 
 	// 消息处理函数
-	afx_msg void OnBnClickedSearchConfirm();   // 添加搜索按钮点击函数声明
-	afx_msg void OnBnClickedCancel();          // 添加取消按钮的消息处理声明
+	afx_msg void OnBnClickedSearchConfirm();   
+	afx_msg void OnBnClickedCancel();   
 };

@@ -56,11 +56,11 @@ void SearchDlg::OnBnClickedSearchConfirm()
 	// TODO: 在此添加控件通知处理程序代码
 
 	GetDlgItem(IDC_SEARCH_EDIT)->GetWindowText(m_search_edit);
-	// 获取下拉框选中的状态
+
 	int index = m_search_combobox.GetCurSel();
 	m_search_combobox.GetLBText(index, m_search_combobox_result);
 
-	EndDialog(IDOK);  // 结束对话框并返回 IDOK
+	EndDialog(IDOK);
 }
 
 

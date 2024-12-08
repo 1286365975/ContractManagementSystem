@@ -5,7 +5,7 @@
 #include <vector>  
 #include <mysql.h>
 #include <winsock2.h>
-#include <afxwin.h>  // 如果没有需要网络功能，可以去掉此行
+#include <afxwin.h>
 #define ERROR_QUERY_FAIL -1 // 操作失败
 
 // 定义MySQL连接信息

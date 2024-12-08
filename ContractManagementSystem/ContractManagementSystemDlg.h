@@ -38,7 +38,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	void ShowData();   // 显示数据
+	void ShowData();
 	void LoadData();
 	bool ConnectDB();
 
@@ -56,8 +56,9 @@ public:
 	afx_msg void OnBnClickedButtonChange();
 	afx_msg void OnBnClickedButtonSearch();
 	afx_msg void OnBnClickedButtonExit();
-	int GetSelectedContractIDs();
 	afx_msg void OnBnClickedButtonRefresh();
+
+	int GetSelectedContractIDs();
 };
 
 

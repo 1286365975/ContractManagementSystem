@@ -31,9 +31,6 @@ public:
     CComboBox m_status;
     CString m_status_result;
 
-    // 界面控件初始化
     void InitCombobox();
-
-    // 确认按钮点击事件，传递数据给主界面
     afx_msg void OnBnClickedButtonConfirm();
 };

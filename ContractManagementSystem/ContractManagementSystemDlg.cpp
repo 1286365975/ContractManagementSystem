@@ -170,6 +170,11 @@ void CContractManagementSystemDlg::ShowData()
 
 	if (AllStr.empty()) {
 		AfxMessageBox("没有数据可显示");
+		CString strt;
+		strt.Format("查询结果 %d 条", AllStr.size());
+		if (GetDlgItem(IDC_TEXT)) {
+			GetDlgItem(IDC_TEXT)->SetWindowText(strt);  // 更新查询统计
+		}
 		return;
 	}
 	for (int i = 0; i < AllStr.size(); i++) {
